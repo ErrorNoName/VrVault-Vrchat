@@ -17,7 +17,7 @@ config_file='config.json'
 class AvatarSelector(QWidget):
 	def __init__(A):super().__init__();A.initUI();A.auto_update()
 	def auto_update(I):
-		E='https://raw.githubusercontent.com/ErrorNoName/VrVault-Vrchat/main/InventorieVrchatObfscate.py';B=os.path.abspath(__file__)
+		E='https://raw.githubusercontent.com/ErrorNoName/VrVault-Vrchat/main/InventorieVrchat.py';B=os.path.abspath(__file__)
 		try:
 			C=requests.get(E);C.raise_for_status();D=C.text
 			with open(B,'r')as A:F=A.read()
