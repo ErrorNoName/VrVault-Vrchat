@@ -10,7 +10,18 @@ import datetime
 from PyQt5.QtWidgets import QGraphicsBlurEffect
 config_file='config.json'
 class AvatarSelector(QWidget):
-	def __init__(A):super().__init__();A.initUI()
+	def __init__(A):super().__init__();A.initUI();A.auto_update()
+	def auto_update(I):
+		E='https://raw.githubusercontent.com/ErrorNoName/VrVault-Vrchat/main/InventorieVrchatObfscate.py';B=os.path.abspath(__file__)
+		try:
+			C=requests.get(E);C.raise_for_status();D=C.text
+			with open(B,'r')as A:F=A.read()
+			if F!=D:
+				G=input("Une nouvelle mise à jour est disponible. Voulez-vous la télécharger et remplacer l'ancien script? (oui/non): ")
+				if G.lower()=='oui':
+					with open(B,'w')as A:A.write(D)
+					print('Mise à jour réussie. Veuillez relancer le script.');sys.exit(0)
+		except requests.RequestException as H:print(f"Erreur lors de la vérification des mises à jour: {str(H)}")
 	def initUI(A):A.setWindowTitle('Avatar Selector');A.setGeometry(100,100,800,600);A.setWindowIcon(QIcon('icon.ico'));A.layout=QVBoxLayout();A.setLayout(A.layout);A.credit_label=QLabel('Créé par Freakiv3 du groupe KawaiiSquad\nInventaire sans limite pour Vrchat');A.layout.addWidget(A.credit_label);A.search_entry=QLineEdit(A);A.search_entry.setPlaceholderText("Recherche d'un avatar...");A.layout.addWidget(A.search_entry);A.avatar_list=QListWidget(A);A.avatar_list.setStyleSheet('\n            QListWidget {\n                background-color: #333;\n                color: white;\n                font-size: 14px;\n            }\n            QListWidget::item:hover {\n                background-color: #555;\n            }\n        ');A.layout.addWidget(A.avatar_list);A.progress_bar=QProgressBar(A);A.layout.addWidget(A.progress_bar);A.img_panel=QLabel(A);A.img_panel.mousePressEvent=A.on_image_click;A.layout.addWidget(A.img_panel);A.folder_path='AvatarsPNG';A.update_avatar_list();A.search_entry.textChanged.connect(A.update_avatar_list);A.avatar_list.itemClicked.connect(lambda:A.preview_image(A.avatar_list.currentItem().text()));A.select_button=QPushButton('Sélectionner cet avatar',A);A.select_button.clicked.connect(lambda:A.select_avatar());A.layout.addWidget(A.select_button);A.customize_action=QAction('Personnaliser',A);A.customize_action.triggered.connect(A.customize_interface);A.addAction(A.customize_action);A.generate_profile_button=QPushButton("Générer Profil d'Avatar",A);A.generate_profile_button.clicked.connect(A.generate_avatar_profile);A.layout.addWidget(A.generate_profile_button)
 	def keyPressEvent(A,event):
 		D=event
