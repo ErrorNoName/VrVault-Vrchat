@@ -8,6 +8,11 @@ from PyQt5.QtWidgets import QInputDialog,QLabel
 from PIL import Image
 import datetime
 from PyQt5.QtWidgets import QGraphicsBlurEffect
+from getpass import getpass
+from vrchatapi import Configuration,ApiClient
+from vrchatapi.api import AuthenticationApi
+from vrchatapi.models import TwoFactorAuthCode,TwoFactorEmailCode
+from vrchatapi.rest import ApiException
 config_file='config.json'
 class AvatarSelector(QWidget):
 	def __init__(A):super().__init__();A.initUI();A.auto_update()
@@ -39,9 +44,30 @@ class AvatarSelector(QWidget):
 	def get_auth_cookie(B):
 		A=B.load_auth_cookie()
 		if not A:
-			A,C=QInputDialog.getText(B,'Auth Cookie Requise','Veuillez entrer votre auth_cookie:',QLineEdit.Password)
-			if C and A:B.save_auth_cookie(A)
+			C,D=B.prompt_for_credentials()
+			if C and D:
+				A=B.login_with_credentials(C,D)
+				if A:B.save_auth_cookie(A)
 		return A
+	def prompt_for_credentials(A):B=QInputDialog.getText(A,'Identifiants requis',"Entrez votre nom d'utilisateur VRChat:",QLineEdit.Normal);C=QInputDialog.getText(A,'Mot de passe','Entrez votre mot de passe:',QLineEdit.Password);return B[0],C[0]
+	def login_with_credentials(E,username,password):
+		F=Configuration(username=username,password=password)
+		try:
+			with ApiClient(F)as D:
+				C=AuthenticationApi(D);D.user_agent='MyProject/1.0 (my@email.com)'
+				try:G=C.get_current_user()
+				except ApiException as A:
+					if A.status==200:
+						if'Email 2 Factor Authentication'in A.reason:
+							B=QInputDialog.getText(E,'Code 2FA Email','Entrez le code 2FA Email:',QLineEdit.Normal)
+							if B[0]:C.verify2_fa_email_code(TwoFactorEmailCode(B[0]))
+						elif'2 Factor Authentication'in A.reason:
+							B=QInputDialog.getText(E,'Code 2FA','Entrez le code 2FA:',QLineEdit.Normal)
+							if B[0]:C.verify2_fa(TwoFactorAuthCode(B[0]))
+						G=C.get_current_user()
+					else:raise A
+				H=D.rest_client.cookie_jar;I=next((A.value for A in H if A.name=='auth'),None);return I
+		except ApiException as A:print(f"Erreur lors de la connexion : {A}");return
 	def select_avatar(A):
 		B=A.get_auth_cookie()
 		if not B:print("Auth_cookie n'est pas valide ou n'a pas été fourni.");return
