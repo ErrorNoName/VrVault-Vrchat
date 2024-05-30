@@ -21,12 +21,12 @@ Découvrez **VrVault VRChat** et transformez la gestion de vos avatars dès main
 
 # Installer Git Project
 ```bash
-
+git clone https://github.com/ErrorNoName/VrVault-Vrchat.git
 ```
 
 # Installer les dépendances nécessaires
 ```bash
-git clone https://github.com/ErrorNoName/VrVault-Vrchat.git
+pip install -r requirements.txt
 ```
 # Obtenir facilement le token d'authentification de VRChat
 1. Ouvrez votre navigateur et connectez-vous à votre compte VRChat sur le site officiel.
