@@ -33,6 +33,6 @@ pip install -r requirements.txt
 2. Ouvrez les outils de développement de votre navigateur (F12 ou Ctrl+Shift+I).
 3. Allez à l'onglet "Network" (Réseau) et rechargez la page (F5).
 4. Recherchez une requête vers "api.vrchat.cloud".
-5. Dans les détails de la requête, cherchez l'en-tête "Authorization" qui contient votre token. Il ressemblera à ceci : `authcookie <votre-token>`.
+5. Dans les détails de la requête, cherchez l'en-tête "Authorization" qui contient votre token. Il ressemblera à ceci : `auth=authcookie_XXX-XXX-XXX-XXX-XXX`.
 
 [Cookie Screen](https://media.discordapp.net/attachments/1118076831418028082/1245875703333785671/47xvoM2.png?ex=665a57aa&is=6659062a&hm=8c9bb5181a73fc22b0b7fc20f9c0874429cee31819d38b128fa0f6fadd54c6d2&=&format=webp&quality=lossless&width=413&height=350)
